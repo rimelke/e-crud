@@ -9,7 +9,10 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
+      "@entities/*": ["./src/core/entities/*"],
+      "@repositories/*": ["./src/core/repositories/*"],
       "@useCases/*": ["./src/core/useCases/*"],
+      "@providers/*": ["./src/core/providers/*"],
       "@tests/*": ["./tests/*"]
     }
   }
