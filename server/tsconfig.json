@@ -13,6 +13,7 @@
       "@repositories/*": ["./src/core/repositories/*"],
       "@useCases/*": ["./src/core/useCases/*"],
       "@providers/*": ["./src/core/providers/*"],
+      "@validators/*": ["./src/core/validation/validators/*"],
       "@tests/*": ["./tests/*"]
     }
   }
