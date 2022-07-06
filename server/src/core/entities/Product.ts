@@ -3,7 +3,6 @@ import DateValidator from '@validators/DateValidator'
 import NumberValidator from '@validators/NumberValidator'
 import ObjectValidator from '@validators/ObjectValidator'
 import StringValidator from '@validators/StringValidator'
-import User from './User'
 
 interface ProductDTO {
   id: string
@@ -23,6 +22,7 @@ const validator = new ObjectValidator().match({
   publishedAt: new DateValidator().required(),
   imageUrls: new ArrayValidator()
     .items(new StringValidator().url().required())
+    .min(1)
     .required(),
   userId: new StringValidator().required()
 })
@@ -44,6 +44,8 @@ class Product {
     this.publishedAt = data.publishedAt
     this.imageUrls = data.imageUrls
     this.userId = data.userId
+
+    this.validate()
   }
 
   validate() {

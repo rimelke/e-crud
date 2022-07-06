@@ -12,7 +12,7 @@ test('should get products by user', async () => {
       id: '1',
       description: 'description1',
       name: 'product1',
-      imageUrls: [],
+      imageUrls: ['https://picsum.photos/200'],
       price: 10,
       publishedAt: new Date(),
       userId: '1'
@@ -21,7 +21,7 @@ test('should get products by user', async () => {
       id: '2',
       description: 'description2',
       name: 'product2',
-      imageUrls: [],
+      imageUrls: ['https://picsum.photos/200'],
       price: 10,
       publishedAt: new Date(),
       userId: '2'
