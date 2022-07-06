@@ -9,9 +9,13 @@ export interface CreateProductDTO {
   userId: string
 }
 
+export type UpdateProductDTO = Partial<CreateProductDTO>
+
 interface ProductRepository {
+  findById(id: string): Promise<Product | undefined>
   findByUserId(userId: string): Promise<Product[]>
   create(data: CreateProductDTO): Promise<Product>
+  update(id: string, data: UpdateProductDTO): Promise<Product>
 }
 
 export default ProductRepository
