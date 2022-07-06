@@ -31,13 +31,20 @@ test('should validate a regex', () => {
   )
 })
 
-test('should validat an email', () => {
+test('should validate an email', () => {
   const validator = new StringValidator().email()
 
   expect(validator.validate('john@doe.com')).toBe('john@doe.com')
   expect(() => validator.validate('test')).toThrow(
     'value must be a valid email'
   )
+})
+
+test('should validate an url', () => {
+  const validator = new StringValidator().url()
+
+  expect(validator.validate('https://example.com')).toBe('https://example.com')
+  expect(() => validator.validate('test')).toThrow('value must be a valid url')
 })
 
 test('should capitalize a string', () => {

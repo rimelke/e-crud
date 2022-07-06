@@ -64,6 +64,22 @@ class StringValidator extends Validator {
     return this
   }
 
+  url() {
+    this.validators.push({
+      priority: 20,
+      validator: (value: string) => ({
+        isValid:
+          /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/.test(
+            value
+          ),
+        newValue: value,
+        errorMessage: 'value must be a valid url'
+      })
+    })
+
+    return this
+  }
+
   capitalize() {
     this.validators.push({
       priority: 20,

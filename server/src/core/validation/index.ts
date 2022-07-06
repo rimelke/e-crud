@@ -18,7 +18,7 @@ export abstract class Validator {
     this.validators.push({
       priority: 0,
       validator: (value) => ({
-        isValid: Boolean(value),
+        isValid: typeof value === 'number' || Boolean(value),
         newValue: value,
         errorMessage: 'value is required'
       })

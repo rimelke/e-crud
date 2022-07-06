@@ -2,6 +2,8 @@ import EmailProvider from '@providers/EmailProvider'
 import HashProvider from '@providers/HashProvider'
 import TokenProvider from '@providers/TokenProvider'
 import UserRepository from '@repositories/UserRepository'
+import ObjectValidator from '@validators/ObjectValidator'
+import StringValidator from '@validators/StringValidator'
 
 interface CreateUserDTO {
   firstName: string
@@ -19,6 +21,14 @@ class CreateUser {
   ) {}
 
   async execute(data: CreateUserDTO) {
+    new ObjectValidator()
+      .match({
+        email: new StringValidator().trim().email().required(),
+        password: new StringValidator().min(8).required()
+      })
+      .required()
+      .validate(data)
+
     const emailAlreadyUsed = await this.userRepository.findByEmail(data.email)
 
     if (emailAlreadyUsed) throw new Error('email already used')

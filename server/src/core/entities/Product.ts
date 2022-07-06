@@ -1,3 +1,8 @@
+import ArrayValidator from '@validators/ArrayValidator'
+import DateValidator from '@validators/DateValidator'
+import NumberValidator from '@validators/NumberValidator'
+import ObjectValidator from '@validators/ObjectValidator'
+import StringValidator from '@validators/StringValidator'
 import User from './User'
 
 interface ProductDTO {
@@ -9,6 +14,18 @@ interface ProductDTO {
   imageUrls: string[]
   userId: string
 }
+
+const validator = new ObjectValidator().match({
+  id: new StringValidator().required(),
+  name: new StringValidator().trim().required(),
+  description: new StringValidator().trim().required(),
+  price: new NumberValidator().required(),
+  publishedAt: new DateValidator().required(),
+  imageUrls: new ArrayValidator()
+    .items(new StringValidator().url().required())
+    .required(),
+  userId: new StringValidator().required()
+})
 
 class Product {
   id: string
@@ -27,6 +44,10 @@ class Product {
     this.publishedAt = data.publishedAt
     this.imageUrls = data.imageUrls
     this.userId = data.userId
+  }
+
+  validate() {
+    validator.validate(this)
   }
 }
 

@@ -1,6 +1,8 @@
 import HashProvider from '@providers/HashProvider'
 import UserRepository from '@repositories/UserRepository'
 import AuthTokenProvider from '@providers/AuthTokenProvider'
+import ObjectValidator from '@validators/ObjectValidator'
+import StringValidator from '@validators/StringValidator'
 
 interface LoginUserDTO {
   email: string
@@ -15,6 +17,14 @@ class LoginUser {
   ) {}
 
   async execute(data: LoginUserDTO) {
+    new ObjectValidator()
+      .match({
+        email: new StringValidator().trim().email().required(),
+        password: new StringValidator().required()
+      })
+      .required()
+      .validate(data)
+
     const user = await this.userRepository.findByEmail(data.email)
 
     if (!user) throw new Error('user not found')

@@ -1,3 +1,6 @@
+import ObjectValidator from '@validators/ObjectValidator'
+import StringValidator from '@validators/StringValidator'
+
 interface UserDTO {
   id: string
   firstName: string
@@ -5,6 +8,14 @@ interface UserDTO {
   email: string
   password: string
 }
+
+const validator = new ObjectValidator().match({
+  id: new StringValidator().required(),
+  firstName: new StringValidator().trim().noSpaces().capitalize().required(),
+  lastName: new StringValidator().trim().noSpaces().capitalize().required(),
+  email: new StringValidator().trim().email().required(),
+  password: new StringValidator().required()
+})
 
 class User {
   id: string
@@ -19,6 +30,12 @@ class User {
     this.lastName = data.lastName
     this.email = data.email
     this.password = data.password
+
+    this.validate()
+  }
+
+  validate() {
+    validator.validate(this)
   }
 }
 
