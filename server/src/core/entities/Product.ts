@@ -24,7 +24,8 @@ const validator = new ObjectValidator().match({
     .items(new StringValidator().url().required())
     .min(1)
     .required(),
-  userId: new StringValidator().required()
+  userId: new StringValidator().required(),
+  deletedAt: new DateValidator()
 })
 
 class Product {
@@ -35,6 +36,7 @@ class Product {
   publishedAt: Date
   imageUrls: string[]
   userId: string
+  deletedAt?: Date
 
   constructor(data: ProductDTO) {
     this.id = data.id

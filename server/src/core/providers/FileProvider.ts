@@ -24,6 +24,7 @@ export class File {
 
 interface FileProvider {
   save(files: File[]): Promise<string[]>
+  delete(files: string[]): Promise<void>
 }
 
 export default FileProvider

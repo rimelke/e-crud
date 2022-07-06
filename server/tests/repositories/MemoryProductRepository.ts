@@ -6,6 +6,7 @@ import ProductRepository, {
 
 class MemoryProductRepository implements ProductRepository {
   products: Product[] = []
+  deletedProducts: Product[] = []
   private lastId = 0
 
   async findById(id: string) {
@@ -35,6 +36,20 @@ class MemoryProductRepository implements ProductRepository {
     this.products.splice(productIndex, 1, updatedProduct)
 
     return updatedProduct
+  }
+
+  async softDelete(id: string) {
+    const productIndex = this.products.findIndex((product) => product.id === id)
+
+    if (productIndex === -1) return
+
+    const [product] = this.products.splice(productIndex, 1)
+
+    product.deletedAt = new Date()
+
+    this.deletedProducts.push(product)
+
+    return product
   }
 }
 

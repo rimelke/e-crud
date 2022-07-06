@@ -16,6 +16,7 @@ interface ProductRepository {
   findByUserId(userId: string): Promise<Product[]>
   create(data: CreateProductDTO): Promise<Product>
   update(id: string, data: UpdateProductDTO): Promise<Product>
+  softDelete(id: string): Promise<Product | undefined>
 }
 
 export default ProductRepository
