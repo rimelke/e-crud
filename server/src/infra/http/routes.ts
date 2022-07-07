@@ -23,5 +23,9 @@ routes.patch(
   BusboyMiddleware.handle(['images', 'imageUrls']),
   ExpressAdapter.adapt(ProductController.updateProduct)
 )
+routes.delete(
+  '/products/:id',
+  ExpressAdapter.adapt(ProductController.deleteProduct)
+)
 
 export default routes

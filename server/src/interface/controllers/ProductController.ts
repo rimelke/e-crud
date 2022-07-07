@@ -2,6 +2,7 @@ import JwtAuthTokenProvider from '@infra/providers/JwtAuthTokenProvider'
 import LocalFileProvider from '@infra/providers/LocalFileProvider'
 import PrismaProductRepository from '@infra/repositories/PrismaProductRepository'
 import CreateProduct from '@useCases/CreateProduct'
+import DeleteProduct from '@useCases/DeleteProduct'
 import GetProductsByUser from '@useCases/GetProductsByUser'
 import UpdateProduct from '@useCases/UpdateProduct'
 import ValidateAuthToken from '@useCases/ValidateAuthToken'
@@ -58,6 +59,22 @@ class ProductController {
     const updateProduct = new UpdateProduct(productRepository, fileProvider)
 
     const result = await updateProduct.execute(params.id, body)
+
+    return result
+  }
+
+  static deleteProduct: Controller = async ({ params, authorization }) => {
+    const authTokenProvider = new JwtAuthTokenProvider()
+
+    const validateAuthToken = new ValidateAuthToken(authTokenProvider)
+
+    const { userId } = await validateAuthToken.execute(authorization)
+
+    const productRepository = new PrismaProductRepository()
+
+    const deleteProduct = new DeleteProduct(productRepository)
+
+    const result = await deleteProduct.execute(params.id)
 
     return result
   }

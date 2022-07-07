@@ -116,13 +116,17 @@ class PrismaProductRepository implements ProductRepository {
     const now = new Date()
 
     await prisma.$transaction([
+      prisma.products.delete({ where: { id } }),
+      prisma.deletedProducts.create({
+        data: {
+          ...savedProduct,
+          images: { connect: savedProduct.images.map(({ url }) => ({ url })) },
+          deletedAt: now
+        }
+      }),
       prisma.productImages.updateMany({
         where: { productId: id },
         data: { deletedProductId: id, productId: null }
-      }),
-      prisma.products.delete({ where: { id } }),
-      prisma.deletedProducts.create({
-        data: { ...savedProduct, deletedAt: now }
       })
     ])
 
