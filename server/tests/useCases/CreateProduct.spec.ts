@@ -2,6 +2,7 @@ import { File } from '@providers/FileProvider'
 import FakeFileProvider from '@tests/providers/FakeFileProvider'
 import MemoryProductRepository from '@tests/repositories/MemoryProductRepository'
 import CreateProduct from '@useCases/CreateProduct'
+import { Readable } from 'stream'
 
 test('should create a product', async () => {
   const productRepository = new MemoryProductRepository()
@@ -14,16 +15,14 @@ test('should create a product', async () => {
     images: [
       new File({
         name: 'productImage',
-        content: 'test',
+        content: new Readable(),
         extension: '.jpg',
-        size: 100,
         type: 'image'
       }),
       new File({
         name: 'productImage',
-        content: 'test',
+        content: new Readable(),
         extension: '.jpg',
-        size: 100,
         type: 'image'
       })
     ],

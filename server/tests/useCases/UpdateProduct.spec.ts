@@ -3,6 +3,7 @@ import { File } from '@providers/FileProvider'
 import FakeFileProvider from '@tests/providers/FakeFileProvider'
 import MemoryProductRepository from '@tests/repositories/MemoryProductRepository'
 import UpdateProduct from '@useCases/UpdateProduct'
+import { Readable } from 'stream'
 
 const makeSut = () => {
   const productRepository = new MemoryProductRepository()
@@ -30,9 +31,9 @@ const data = {
   images: [
     new File({
       name: 'productImage',
-      content: 'test',
+      content: new Readable(),
       extension: '.jpg',
-      size: 100,
+
       type: 'image'
     })
   ],
@@ -40,7 +41,7 @@ const data = {
 }
 
 test('should update a product', async () => {
-  const { productRepository, updateProduct, fileProvider } = makeSut()
+  const { updateProduct, fileProvider } = makeSut()
 
   const result = await updateProduct.execute('1', data)
 

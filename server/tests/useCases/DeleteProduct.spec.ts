@@ -5,15 +5,14 @@ import DeleteProduct from '@useCases/DeleteProduct'
 
 const makeSut = () => {
   const productRepository = new MemoryProductRepository()
-  const fileProvider = new FakeFileProvider()
 
-  const deleteProduct = new DeleteProduct(productRepository, fileProvider)
+  const deleteProduct = new DeleteProduct(productRepository)
 
-  return { productRepository, fileProvider, deleteProduct }
+  return { productRepository, deleteProduct }
 }
 
 test('should delete a product', async () => {
-  const { productRepository, deleteProduct, fileProvider } = makeSut()
+  const { productRepository, deleteProduct } = makeSut()
 
   productRepository.products = [
     new Product({
@@ -31,17 +30,14 @@ test('should delete a product', async () => {
 
   expect(product).toBeDefined()
   expect(product?.deletedAt).toBeDefined()
-  expect(fileProvider.count.delete).toBe(1)
-  expect(fileProvider.deletedFilesCount).toBe(2)
   expect(productRepository.deletedProducts.length).toBe(1)
   expect(productRepository.products.length).toBe(0)
 })
 
 test('should not return nothing or delete any file if product do not exists', async () => {
-  const { deleteProduct, fileProvider } = makeSut()
+  const { deleteProduct } = makeSut()
 
   const result = await deleteProduct.execute('1')
 
   expect(result).not.toBeDefined()
-  expect(fileProvider.count.delete).toBe(0)
 })

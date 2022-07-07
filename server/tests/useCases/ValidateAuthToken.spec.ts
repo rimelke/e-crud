@@ -9,21 +9,20 @@ const makeSut = () => {
   return { authTokenProvider, validateAuthToken }
 }
 
-const payloadData = { id: '1' }
-
 test('should validate a token', async () => {
   const { authTokenProvider, validateAuthToken } = makeSut()
 
   const payload = await validateAuthToken.execute(
-    await authTokenProvider.generate(payloadData)
+    await authTokenProvider.generate({ id: '1' })
   )
 
-  expect(payload).toEqual(payloadData)
+  expect(payload).toEqual({ userId: '1' })
 })
 
 test('should not validate an invalid token', async () => {
   const { validateAuthToken } = makeSut()
 
+  await expect(validateAuthToken.execute()).rejects.toThrow('invalid token')
   await expect(validateAuthToken.execute('invalidTokenFormat')).rejects.toThrow(
     'invalid token'
   )
