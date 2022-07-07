@@ -33,7 +33,8 @@ test('should login user', async () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@doe.com',
-      password: await hashProvider.hash('abcd1234')
+      password: await hashProvider.hash('abcd1234'),
+      isActive: true
     })
   )
 
@@ -48,6 +49,22 @@ test('should not login if user was not found', async () => {
   await expect(loginUser.execute(data)).rejects.toThrow('user not found')
 })
 
+test('should not login if user is not active', async () => {
+  const { loginUser, userRepository, hashProvider } = makeSut()
+
+  userRepository.users.push(
+    new User({
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@doe.com',
+      password: await hashProvider.hash('otherpassword')
+    })
+  )
+
+  await expect(loginUser.execute(data)).rejects.toThrow('user is not active')
+})
+
 test('should not login if password is invalid', async () => {
   const { hashProvider, loginUser, userRepository } = makeSut()
 
@@ -57,7 +74,8 @@ test('should not login if password is invalid', async () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@doe.com',
-      password: await hashProvider.hash('otherpassword')
+      password: await hashProvider.hash('otherpassword'),
+      isActive: true
     })
   )
 

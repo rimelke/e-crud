@@ -29,6 +29,8 @@ class LoginUser {
 
     if (!user) throw new Error('user not found')
 
+    if (!user.isActive) throw new Error('user is not active')
+
     const passwordsMatch = await this.hashProvider.compare(
       data.password,
       user.password

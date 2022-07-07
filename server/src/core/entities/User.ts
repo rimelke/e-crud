@@ -1,3 +1,4 @@
+import BooleanValidator from '@validators/BooleanValidator'
 import ObjectValidator from '@validators/ObjectValidator'
 import StringValidator from '@validators/StringValidator'
 
@@ -7,6 +8,7 @@ interface UserDTO {
   lastName: string
   email: string
   password: string
+  isActive?: boolean
 }
 
 const validator = new ObjectValidator().match({
@@ -14,7 +16,8 @@ const validator = new ObjectValidator().match({
   firstName: new StringValidator().trim().noSpaces().capitalize().required(),
   lastName: new StringValidator().trim().noSpaces().capitalize().required(),
   email: new StringValidator().trim().email().required(),
-  password: new StringValidator().required()
+  password: new StringValidator().required(),
+  isActive: new BooleanValidator().required()
 })
 
 class User {
@@ -23,6 +26,7 @@ class User {
   lastName: string
   email: string
   password: string
+  isActive: boolean
 
   constructor(data: UserDTO) {
     this.id = data.id
@@ -30,6 +34,7 @@ class User {
     this.lastName = data.lastName
     this.email = data.email
     this.password = data.password
+    this.isActive = data.isActive || false
 
     this.validate()
   }
