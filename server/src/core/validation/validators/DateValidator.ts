@@ -6,8 +6,8 @@ class DateValidator extends Validator {
     this.validators.push({
       priority: 10,
       validator: (value) => ({
-        isValid: value instanceof Date,
-        newValue: value,
+        isValid: !isNaN(Date.parse(value)),
+        newValue: new Date(value),
         errorMessage: 'value must be a Date'
       })
     })

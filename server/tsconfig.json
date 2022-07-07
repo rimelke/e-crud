@@ -14,6 +14,11 @@
       "@useCases/*": ["./src/core/useCases/*"],
       "@providers/*": ["./src/core/providers/*"],
       "@validators/*": ["./src/core/validation/validators/*"],
+      "@lib/*": ["./src/infra/lib/*"],
+      "@jobs/*": ["./src/infra/jobs/*"],
+      "@infra/*": ["./src/infra/*"],
+      "@controllers/*": ["./src/interface/controllers/*"],
+      "@adapters/*": ["./src/interface/adapters/*"],
       "@tests/*": ["./tests/*"]
     }
   }

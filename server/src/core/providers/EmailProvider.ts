@@ -2,6 +2,7 @@ import { Token } from './TokenProvider'
 
 export interface UserValidationEmailDTO {
   firstName: string
+  lastName: string
   email: string
   token: Token
 }

@@ -22,6 +22,7 @@ class CreateProduct {
       .match({
         images: new ArrayValidator()
           .items(new ObjectValidator().instance(File).required())
+          .min(1)
           .required()
       })
       .required()

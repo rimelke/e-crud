@@ -45,6 +45,7 @@ class CreateUser {
     await this.emailProvider.sendUserValidationEmail({
       email: user.email,
       firstName: user.firstName,
+      lastName: user.lastName,
       token: validationToken
     })
 

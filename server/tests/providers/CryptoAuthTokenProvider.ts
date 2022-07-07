@@ -15,7 +15,9 @@ class CryptoAuthTokenProvider implements AuthTokenProvider {
       .digest('base64')}.${encodedPayload}`
   }
 
-  async verify(token: string) {
+  async verify(token?: string) {
+    if (!token) return null
+
     const [signature, encodedPayload] = token.split('.')
 
     if (!signature || !encodedPayload) return null

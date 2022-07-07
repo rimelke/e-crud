@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+model users {
+  id              String            @id @db.VarChar
+  email           String            @unique @db.VarChar
+  firstName       String            @db.VarChar
+  lastName        String            @db.VarChar
+  password        String            @db.VarChar
+  products        products[]
+  deletedProducts deletedProducts[]
+}
+
+model products {
+  id          String          @id @db.VarChar
+  name        String          @db.VarChar
+  description String          @db.VarChar
+  price       Float           @db.Real
+  publishedAt DateTime        @db.Date
+  userId      String          @db.VarChar
+  user        users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images      productImages[]
+}
+
+model productImages {
+  url              String           @db.VarChar
+  products         products?        @relation(fields: [productId], references: [id])
+  productId        String?          @db.VarChar
+  deletedProduct   deletedProducts? @relation(fields: [deletedProductId], references: [id])
+  deletedProductId String?          @db.VarChar
+
+  @@id([url])
+}
+
+model deletedProducts {
+  id          String          @id @db.VarChar
+  name        String          @db.VarChar
+  description String          @db.VarChar
+  price       Float           @db.Real
+  publishedAt DateTime        @db.Date
+  userId      String          @db.VarChar
+  user        users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deletedAt   DateTime        @db.Timestamptz
+  images      productImages[]
+}

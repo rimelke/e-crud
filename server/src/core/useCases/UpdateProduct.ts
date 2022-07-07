@@ -20,6 +20,8 @@ class UpdateProduct {
   ) {}
 
   async execute(id: string, data: UpdateProductDTO) {
+    new StringValidator().required().validate(id)
+
     new ObjectValidator()
       .match({
         images: new ArrayValidator().items(

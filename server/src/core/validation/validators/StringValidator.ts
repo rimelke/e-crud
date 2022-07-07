@@ -69,7 +69,7 @@ class StringValidator extends Validator {
       priority: 20,
       validator: (value: string) => ({
         isValid:
-          /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/.test(
+          /^https?:\/\/(www\.)?[-a-zA-Z0-9]{1,256}(\.[a-zA-Z0-9()]{1,6})?(:[0-9]{1,4})?\b([-a-zA-Z0-9()@:%_\+.~#?&/=]*)$/.test(
             value
           ),
         newValue: value,

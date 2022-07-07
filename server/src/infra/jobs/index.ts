@@ -1,0 +1,1 @@
+export { ValidationEmail } from './ValidationEmail'
