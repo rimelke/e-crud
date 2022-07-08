@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "outDir": "dist",
     "paths": {
       "@entities/*": ["./src/core/entities/*"],
       "@repositories/*": ["./src/core/repositories/*"],
