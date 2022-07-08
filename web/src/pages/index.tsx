@@ -1,6 +1,6 @@
 import Title from '../components/Title'
 import useGet from '../hooks/useGet'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Modal from '../components/Modal'
 import { FormProvider, useForm } from 'react-hook-form'
 import Input from '../components/Input'
@@ -27,10 +27,14 @@ const schema = yup
     name: yup.string().required('Name is required'),
     description: yup.string().required('Description is required'),
     price: yup.string().required('Price is required'),
-    images: yup
-      .array()
-      .min(1, 'Images must have at least 1 image')
-      .required('Images are requires'),
+    images: yup.array().when('imageUrls', {
+      is: undefined,
+      then: yup
+        .array()
+        .min(1, 'Images must have at least 1 image')
+        .required('Images are requires'),
+      otherwise: yup.array()
+    }),
     publishedAt: yup.string().required('Publish date is required')
   })
   .required()
@@ -83,9 +87,133 @@ const CreateModal = ({ isOpen, onClose, addProduct }: CreateModalProps) => {
   )
 }
 
+interface DeleteModalProps {
+  isOpen: boolean
+  onClose: () => void
+  product?: Product
+  setData: Dispatch<SetStateAction<Product[]>>
+}
+
+const DeleteModal = ({
+  isOpen,
+  onClose,
+  product,
+  setData
+}: DeleteModalProps) => {
+  const { handleRequest, isLoading } = useRequest(
+    `/products/${product?.id}`,
+    'delete'
+  )
+
+  const handleDelete = async () => {
+    const result = await handleRequest()
+
+    if (!result) return
+
+    setData((prevData) => prevData.filter((p) => p.id !== product.id))
+    onClose()
+  }
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`Delete - ${product.name}?`}>
+      <div className="flex gap-4 mt-2 justify-center">
+        <Button onClick={onClose}>Cancel</Button>
+        <Button isLoading={isLoading} onClick={handleDelete} colorSchema="red">
+          Delete
+        </Button>
+      </div>
+    </Modal>
+  )
+}
+
+interface ViewModalProps {
+  isOpen: boolean
+  onClose: () => void
+  product?: Product
+  setData: Dispatch<SetStateAction<Product[]>>
+}
+
+const ViewModal = ({ isOpen, onClose, product, setData }: ViewModalProps) => {
+  const form = useForm({
+    resolver: yupResolver(schema)
+  })
+  const { handleRequest, isLoading } = useRequest(
+    `/products/${product?.id}`,
+    'patch'
+  )
+  const [deleteIsOpen, setDeleteIsOpen] = useState(false)
+
+  useEffect(() => {
+    form.reset(product)
+  }, [product])
+
+  const onSubmit = async (data) => {
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) =>
+      value instanceof Array
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value as any)
+    )
+
+    const result = await handleRequest(formData)
+
+    if (!result) return
+
+    setData((prevData) => {
+      const index = prevData.findIndex((p) => p.id === product.id)
+
+      prevData[index] = result
+
+      return prevData
+    })
+    onClose()
+  }
+
+  return (
+    <>
+      <DeleteModal
+        isOpen={deleteIsOpen}
+        onClose={() => setDeleteIsOpen(false)}
+        product={product}
+        setData={setData}
+      />
+      <Modal isOpen={isOpen} onClose={onClose} title={product?.name}>
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-2">
+            <Input label="Name" name="name" autoComplete="off" />
+            <Textarea name="description" label="Description" />
+            <NumberInput name="price" label="Price" autoComplete="off" />
+            <Input type="date" name="publishedAt" label="Publish date" />
+            <ImagesInput defaultImages={product?.imageUrls} />
+
+            <div className="flex gap-4 mt-2 justify-center">
+              <Button
+                onClick={() => {
+                  onClose()
+                  setDeleteIsOpen(true)
+                }}
+                colorSchema="red">
+                Delete
+              </Button>
+              <Button isLoading={isLoading}>Save</Button>
+            </div>
+          </form>
+        </FormProvider>
+      </Modal>
+    </>
+  )
+}
+
 const Home = () => {
   const { data, setData } = useGet<Product[]>('/products')
   const [createIsOpen, setCreateIsOpen] = useState(false)
+  const [viewIsOpen, setViewIsOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product>()
 
   return (
     <div className="p-8">
@@ -94,6 +222,12 @@ const Home = () => {
         isOpen={createIsOpen}
         onClose={() => setCreateIsOpen(false)}
         addProduct={(product) => setData((prevData) => [product, ...prevData])}
+      />
+      <ViewModal
+        isOpen={viewIsOpen}
+        onClose={() => setViewIsOpen(false)}
+        product={selectedProduct}
+        setData={setData}
       />
       <ul className="flex flex-wrap mt-8 gap-8">
         <li
@@ -104,6 +238,10 @@ const Home = () => {
         {data?.map((product) => (
           <li
             className="border w-44 overflow-hidden rounded-lg border-slate-200 flex flex-col"
+            onClick={() => {
+              setSelectedProduct(product)
+              setViewIsOpen(true)
+            }}
             key={product.id}>
             <img className="h-40 object-cover" src={product.imageUrls[0]} />
             <div className="flex flex-col p-2">

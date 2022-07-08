@@ -22,7 +22,11 @@ interface IFile {
   url: string
 }
 
-const ImagesInput = () => {
+interface ImagesInputProps {
+  defaultImages?: string[]
+}
+
+const ImagesInput = ({ defaultImages = [] }: ImagesInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [files, setFiles] = useState<IFile[]>([])
   const { field } = useController({ name: 'images' })
@@ -48,8 +52,15 @@ const ImagesInput = () => {
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="flex gap-2">
-        {files.length > 0 ? (
-          files.map((file) => <PreviewFile url={file.url} key={file.url} />)
+        {defaultImages.length > 0 || files.length > 0 ? (
+          <>
+            {defaultImages.map((url) => (
+              <PreviewFile key={url} url={url} />
+            ))}
+            {files.map((file) => (
+              <PreviewFile url={file.url} key={file.url} />
+            ))}
+          </>
         ) : (
           <span>No images selected</span>
         )}

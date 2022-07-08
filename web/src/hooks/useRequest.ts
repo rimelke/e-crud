@@ -8,7 +8,7 @@ const useRequest = (
 ) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleRequest = async (data: any) => {
+  const handleRequest = async (data?: any) => {
     setIsLoading(true)
     try {
       const response = await api[type](url, data)
