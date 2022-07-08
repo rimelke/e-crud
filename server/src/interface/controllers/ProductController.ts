@@ -58,7 +58,7 @@ class ProductController {
 
     const updateProduct = new UpdateProduct(productRepository, fileProvider)
 
-    const result = await updateProduct.execute(params.id, body)
+    const result = await updateProduct.execute(params.id, userId, body)
 
     return result
   }
@@ -74,7 +74,7 @@ class ProductController {
 
     const deleteProduct = new DeleteProduct(productRepository)
 
-    const result = await deleteProduct.execute(params.id)
+    const result = await deleteProduct.execute(params.id, userId)
 
     return result
   }

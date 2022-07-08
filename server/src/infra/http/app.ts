@@ -3,7 +3,7 @@ import express from 'express'
 import routes from './routes'
 import { ExpressAdapter } from '@bull-board/express'
 import { createBullBoard } from '@bull-board/api'
-import BusboyMiddleware from './middlewares/BusboyMiddleware'
+import cors from 'cors'
 
 const app = express()
 const expressAdapter = new ExpressAdapter()
@@ -13,6 +13,7 @@ createBullBoard({
   queues: getQueues()
 })
 
+app.use(cors())
 app.use(express.json())
 app.use(routes)
 
