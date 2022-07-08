@@ -106,12 +106,10 @@ class PrismaProductRepository implements ProductRepository {
   }
 
   async softDelete(id: string) {
-    const savedProduct = await prisma.products.findUnique({
+    const savedProduct = await prisma.products.findUniqueOrThrow({
       where: { id },
       include: { images: true }
     })
-
-    if (!savedProduct) return
 
     const now = new Date()
 

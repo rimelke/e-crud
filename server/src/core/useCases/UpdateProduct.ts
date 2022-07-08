@@ -19,7 +19,7 @@ class UpdateProduct {
     private fileProvider: FileProvider
   ) {}
 
-  async execute(id: string, data: UpdateProductDTO) {
+  async execute(id: string, userId: string, data: UpdateProductDTO) {
     new StringValidator().required().validate(id)
 
     new ObjectValidator()
@@ -39,6 +39,8 @@ class UpdateProduct {
     const product = await this.productRepository.findById(id)
 
     if (!product) throw new Error('product not found')
+
+    if (product.userId !== userId) throw new Error('product is not yours')
 
     const usedImageUrls = product.imageUrls.filter(
       (imageUrl) => value.imageUrls?.includes(imageUrl) ?? true

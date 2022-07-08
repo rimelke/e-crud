@@ -8,12 +8,6 @@ const makeSut = () => {
 
   const deleteProduct = new DeleteProduct(productRepository)
 
-  return { productRepository, deleteProduct }
-}
-
-test('should delete a product', async () => {
-  const { productRepository, deleteProduct } = makeSut()
-
   productRepository.products = [
     new Product({
       id: '1',
@@ -26,7 +20,13 @@ test('should delete a product', async () => {
     })
   ]
 
-  const product = await deleteProduct.execute('1')
+  return { productRepository, deleteProduct }
+}
+
+test('should delete a product', async () => {
+  const { productRepository, deleteProduct } = makeSut()
+
+  const product = await deleteProduct.execute('1', '1')
 
   expect(product).toBeDefined()
   expect(product?.deletedAt).toBeDefined()
@@ -37,7 +37,15 @@ test('should delete a product', async () => {
 test('should not return nothing or delete any file if product do not exists', async () => {
   const { deleteProduct } = makeSut()
 
-  const result = await deleteProduct.execute('1')
+  const result = await deleteProduct.execute('2', '1')
 
   expect(result).not.toBeDefined()
+})
+
+test('should not delete if product is not from user', async () => {
+  const { deleteProduct } = makeSut()
+
+  await expect(deleteProduct.execute('1', '2')).rejects.toThrow(
+    'product is not yours'
+  )
 })

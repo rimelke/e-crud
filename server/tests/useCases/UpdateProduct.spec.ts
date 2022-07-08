@@ -43,7 +43,7 @@ const data = {
 test('should update a product', async () => {
   const { updateProduct, fileProvider } = makeSut()
 
-  const result = await updateProduct.execute('1', data)
+  const result = await updateProduct.execute('1', '1', data)
 
   expect(result.name).toBe(data.name)
   expect(result.imageUrls.length).toBe(2)
@@ -54,7 +54,7 @@ test('should update a product', async () => {
 test('should use all previous imageUrls if it is not defined in update data', async () => {
   const { updateProduct } = makeSut()
 
-  const result = await updateProduct.execute('1', {
+  const result = await updateProduct.execute('1', '1', {
     images: data.images
   })
 
@@ -64,7 +64,7 @@ test('should use all previous imageUrls if it is not defined in update data', as
 test('should not add new images if it is not defined in update data', async () => {
   const { updateProduct, fileProvider } = makeSut()
 
-  const result = await updateProduct.execute('1', {})
+  const result = await updateProduct.execute('1', '1', {})
 
   expect(result.imageUrls.length).toBe(1)
   expect(fileProvider.count.save).toBe(0)
@@ -73,7 +73,15 @@ test('should not add new images if it is not defined in update data', async () =
 test('should not update if product do not exists', async () => {
   const { updateProduct } = makeSut()
 
-  await expect(updateProduct.execute('2', data)).rejects.toThrow(
+  await expect(updateProduct.execute('2', '1', data)).rejects.toThrow(
     'product not found'
+  )
+})
+
+test('should not update if product is not from user', async () => {
+  const { updateProduct } = makeSut()
+
+  await expect(updateProduct.execute('1', '2', data)).rejects.toThrow(
+    'product is not yours'
   )
 })

@@ -41,8 +41,6 @@ class MemoryProductRepository implements ProductRepository {
   async softDelete(id: string) {
     const productIndex = this.products.findIndex((product) => product.id === id)
 
-    if (productIndex === -1) return
-
     const [product] = this.products.splice(productIndex, 1)
 
     product.deletedAt = new Date()
