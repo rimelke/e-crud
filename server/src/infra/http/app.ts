@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { getQueues } from '@lib/bull'
 import express from 'express'
 import routes from './routes'

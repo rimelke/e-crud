@@ -10,8 +10,6 @@ import Controller from './Controller'
 
 class ProductController {
   static createProduct: Controller = async ({ body, authorization }) => {
-    console.log('olha onde chegou')
-
     const authTokenProvider = new JwtAuthTokenProvider()
 
     const validateAuthToken = new ValidateAuthToken(authTokenProvider)
@@ -20,8 +18,6 @@ class ProductController {
 
     const productRepository = new PrismaProductRepository()
     const fileProvider = new LocalFileProvider()
-
-    console.log('olha onde chegou22222')
 
     const createProduct = new CreateProduct(productRepository, fileProvider)
 

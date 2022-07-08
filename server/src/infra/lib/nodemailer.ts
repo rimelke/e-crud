@@ -3,11 +3,11 @@ import hbs, { TemplateOptions } from 'nodemailer-express-handlebars'
 import path from 'path'
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.mailtrap.io',
-  port: 2525,
+  host: process.env.MAIL_HOST as string,
+  port: process.env.MAIL_PORT as unknown as number,
   auth: {
-    user: 'e76d823ee84de2',
-    pass: '156cca60ed2bdb'
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS
   }
 })
 

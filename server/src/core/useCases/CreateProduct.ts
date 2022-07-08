@@ -30,11 +30,7 @@ class CreateProduct {
 
     const { images, ...value } = data
 
-    console.log('imagesss', images)
-
     const imageUrls = await this.fileProvider.save(data.images)
-
-    console.log(imageUrls)
 
     const product = await this.productRepository.create({
       ...value,
