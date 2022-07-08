@@ -35,12 +35,13 @@ class CreateUser {
 
     const hashedPassword = await this.hashProvider.hash(data.password)
 
+    const validationToken = this.tokenProvider.genValidationToken()
+
     const user = await this.userRepository.create({
       ...data,
-      password: hashedPassword
+      password: hashedPassword,
+      activationToken: validationToken
     })
-
-    const validationToken = this.tokenProvider.genValidationToken()
 
     await this.emailProvider.sendUserValidationEmail({
       email: user.email,

@@ -13,6 +13,7 @@ interface ValidatorObject {
 
 export abstract class Validator {
   protected validators: ValidatorObject[] = []
+  private allowedValues: any[] = []
 
   required() {
     this.validators.push({
@@ -30,7 +31,15 @@ export abstract class Validator {
     return this
   }
 
+  allow(value: any) {
+    this.allowedValues.push(value)
+
+    return this
+  }
+
   validate(value: any) {
+    if (this.allowedValues.includes(value)) return value
+
     const sortedValidators = this.validators.sort(
       (a, b) => a.priority - b.priority
     )

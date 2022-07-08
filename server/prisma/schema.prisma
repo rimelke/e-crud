@@ -9,13 +9,16 @@ generator client {
 }
 
 model users {
-  id              String            @id @db.VarChar
-  email           String            @unique @db.VarChar
-  firstName       String            @db.VarChar
-  lastName        String            @db.VarChar
-  password        String            @db.VarChar
-  products        products[]
-  deletedProducts deletedProducts[]
+  id                String            @id @db.VarChar
+  email             String            @unique @db.VarChar
+  firstName         String            @db.VarChar
+  lastName          String            @db.VarChar
+  password          String            @db.VarChar
+  isActive          Boolean           @default(false) @db.Boolean
+  activationToken   String?           @db.VarChar
+  activationExpires DateTime?         @db.Timestamptz
+  products          products[]
+  deletedProducts   deletedProducts[]
 }
 
 model products {

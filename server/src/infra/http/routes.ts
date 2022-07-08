@@ -8,6 +8,10 @@ const routes = Router()
 
 routes.post('/users', ExpressAdapter.adapt(UserController.createUser))
 routes.post('/users/login', ExpressAdapter.adapt(UserController.loginUser))
+routes.patch(
+  '/users/activate',
+  ExpressAdapter.adapt(UserController.activateUser)
+)
 
 routes.get(
   '/products',

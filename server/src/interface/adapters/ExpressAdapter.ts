@@ -13,7 +13,6 @@ class ExpressAdapter {
 
         res.json(result)
       } catch (err: any) {
-        console.log(err)
         res.status(400).json({ message: err?.message || 'unexpected error' })
       }
     }

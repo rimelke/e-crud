@@ -3,6 +3,7 @@ import BullNodemailerEmailProvider from '@infra/providers/BullNodemailerEmailPro
 import JwtAuthTokenProvider from '@infra/providers/JwtAuthTokenProvider'
 import NanoidTokenProvider from '@infra/providers/NanoidTokenProvider'
 import PrismaUserRepository from '@infra/repositories/PrismaUserRepository'
+import ActivateUser from '@useCases/ActivateUser'
 import CreateUser from '@useCases/CreateUser'
 import LoginUser from '@useCases/LoginUser'
 import Controller from './Controller'
@@ -42,6 +43,16 @@ class UserController {
     const token = await loginUser.execute(body)
 
     return { token }
+  }
+
+  static activateUser: Controller = async ({ body }) => {
+    const userRepository = new PrismaUserRepository()
+
+    const activateUser = new ActivateUser(userRepository)
+
+    const result = await activateUser.execute(body)
+
+    return { id: result.id, isActive: result.isActive }
   }
 }
 

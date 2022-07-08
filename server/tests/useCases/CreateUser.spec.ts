@@ -44,6 +44,8 @@ test('should create an user', async () => {
     true
   )
   expect(emailProvider.counts.sendUserValidationEmail).toBe(1)
+  expect(user.activationToken).toBeDefined()
+  expect(user.activationToken).not.toBe(null)
 })
 
 test('should not create with already used email', async () => {
