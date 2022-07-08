@@ -6,7 +6,8 @@ import * as yup from 'yup'
 import useRequest from '../hooks/useRequest'
 import { useAuth } from '../contexts/AuthContext'
 import Router from 'next/router'
-import Link from 'next/link'
+import Link from '../components/Link'
+import Title from '../components/Title'
 
 const schema = yup
   .object()
@@ -43,13 +44,10 @@ const Login = () => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4">
+          <Title>Sign in your account</Title>
           <Input name="email" label="Email" />
           <Input type="password" name="password" label="Password" />
-          <Link href="/register">
-            <a className="text-indigo-500 hover:text-indigo-600 transition">
-              Create an account
-            </a>
-          </Link>
+          <Link href="/register">Create an account</Link>
           <Button isLoading={isLoading} type="submit">
             Sign In
           </Button>
