@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export const middleware = (req: NextRequest) => {
-  const authorization = req.headers.get('authorization')
+  const token = req.cookies.get('token')
 
-  if (!authorization) return NextResponse.redirect(new URL('/login', req.url))
+  if (!token) return NextResponse.redirect(new URL('/login', req.url))
 }
 
 export const config = {
