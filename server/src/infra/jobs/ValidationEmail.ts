@@ -16,8 +16,7 @@ export const ValidationEmail: Job<ValidationEmailDTO> = {
       template: 'ValidationEmail',
       context: {
         fullName: data.fullName,
-        token: data.token
-        // link: `${process.env.APP_BASE_URL}${process.env.VALIDATE_USER_PATH}/${data.token}`
+        link: `${process.env.ACTIVATE_URL}/${data.token}`
       }
     })
   }
