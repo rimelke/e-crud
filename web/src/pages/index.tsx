@@ -118,7 +118,7 @@ const DeleteModal = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`Delete - ${product.name}?`}>
+      title={`Delete - ${product?.name}?`}>
       <div className="flex gap-4 mt-2 justify-center">
         <Button onClick={onClose}>Cancel</Button>
         <Button isLoading={isLoading} onClick={handleDelete} colorSchema="red">
